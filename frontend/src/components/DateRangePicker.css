@@ -1,0 +1,179 @@
+.date-range-picker-container {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-icon-btn {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  transition: all 0.2s;
+  height: 36px;
+  width: 36px;
+}
+
+.filter-icon-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #bbb;
+}
+
+.filter-icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.date-range-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 320px;
+  padding: 0;
+}
+
+.date-range-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.date-range-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.date-range-tabs {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  padding: 0 16px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: #333;
+}
+
+.tab-btn.active {
+  color: #3498db;
+  border-bottom-color: #3498db;
+  font-weight: 500;
+}
+
+.date-range-content {
+  padding: 20px 16px;
+}
+
+.date-input-group {
+  margin-bottom: 16px;
+}
+
+.date-input-group:last-child {
+  margin-bottom: 0;
+}
+
+.date-input-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.date-input-group input,
+.date-input-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+  transition: border-color 0.2s;
+}
+
+.date-input-group input:focus,
+.date-input-group select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.date-range-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px;
+  border-top: 1px solid #eee;
+}
+
+.clear-btn,
+.apply-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #ddd;
+}
+
+.clear-btn {
+  background: white;
+  color: #555;
+}
+
+.clear-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.apply-btn {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.apply-btn:hover {
+  background: #2980b9;
+  border-color: #2980b9;
+}
+

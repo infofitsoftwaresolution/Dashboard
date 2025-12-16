@@ -1,0 +1,80 @@
+.filter-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  min-width: 150px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.filter-dropdown-header:hover {
+  border-color: #007bff;
+  background: #f8f9fa;
+}
+
+.filter-dropdown-header.active {
+  border-color: #007bff;
+  background: #e7f3ff;
+}
+
+.dropdown-arrow {
+  margin-left: 8px;
+  font-size: 10px;
+  color: #666;
+}
+
+.filter-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.filter-dropdown-options {
+  padding: 4px 0;
+}
+
+.filter-option {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.filter-option:hover {
+  background: #f0f0f0;
+}
+
+.filter-option.selected {
+  background: #e7f3ff;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.filter-option.disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+
+.filter-option.disabled:hover {
+  background: white;
+}
+

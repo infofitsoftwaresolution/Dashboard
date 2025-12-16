@@ -1,0 +1,31 @@
+.metric-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.metric-label {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.metric-change {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.change-percent {
+  display: inline-block;
+}
+
