@@ -11,6 +11,10 @@ import ActiveUsers from './components/ActiveUsers'
 import StaffSpeaking from './components/StaffSpeaking'
 import TimesChart from './components/TimesChart'
 import ConsentsChart from './components/ConsentsChart'
+import SkeletonLoader from './components/SkeletonLoader'
+import EmptyState from './components/EmptyState'
+import Modal from './components/Modal'
+import DataTable from './components/DataTable'
 import './App.css'
 
 const API_BASE_URL = 'http://localhost:8000'
@@ -31,6 +35,8 @@ function App() {
   const [selectedPractitioner, setSelectedPractitioner] = useState(null)
   const [selectedProgram, setSelectedProgram] = useState(null)
   const [selectedLocation, setSelectedLocation] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalData, setModalData] = useState({ title: '', data: [], columns: [] })
 
   useEffect(() => {
     if (activeSection === 'dashboard') {
@@ -176,19 +182,30 @@ function App() {
     }
   }
 
-  const handleViewData = (dataType) => {
+  const handleViewData = (dataType, data = [], columns = []) => {
     console.log('View data clicked for:', dataType)
-    // In a real app, this would open a detailed view or modal
-    alert(`View detailed data for ${dataType}. This feature will open a detailed view.`)
+    setModalData({
+      title: `${dataType} - Detailed View`,
+      data: data,
+      columns: columns
+    })
+    setModalOpen(true)
   }
 
   const handleSettings = () => {
     setShowSettings(!showSettings)
-    alert('Settings panel will open here. Configure your dashboard preferences.')
   }
 
   const handleEdit = () => {
-    alert('Edit mode will be activated here. Customize your dashboard layout.')
+    // Edit mode functionality
+  }
+
+  const handleClearFilters = () => {
+    setDateRange(null)
+    setMonthRange(null)
+    setSelectedPractitioner(null)
+    setSelectedProgram(null)
+    setSelectedLocation(null)
   }
 
   const fetchSectionData = async (section, dateRange = null, monthRange = null, practitioner = null, program = null, location = null) => {
@@ -298,55 +315,83 @@ function App() {
 
     if (loading) {
       return (
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading dashboard...</p>
-        </div>
+        <>
+          <FilterIndicator
+            dateRange={dateRange}
+            monthRange={monthRange}
+            practitioner={selectedPractitioner}
+            program={selectedProgram}
+            location={selectedLocation}
+            recordCount={null}
+            onClear={handleClearFilter}
+          />
+          <div className="metrics-grid">
+            <SkeletonLoader type="card" count={5} />
+          </div>
+          <div className="charts-grid-top">
+            <SkeletonLoader type="chart" />
+            <SkeletonLoader type="chart" />
+            <SkeletonLoader type="chart" />
+          </div>
+          <div className="charts-grid-bottom">
+            <SkeletonLoader type="chart" />
+            <SkeletonLoader type="chart" />
+          </div>
+        </>
       )
     }
 
     return (
       <>
-        <div className="page-header">
-          <h1 className="page-title">Dashboard</h1>
-          <button onClick={() => fetchDashboardData(dateRange, monthRange, selectedPractitioner, selectedProgram, selectedLocation)} className="refresh-btn" title="Refresh data">
-            🔄 Refresh
-          </button>
-        </div>
-        <FilterBar 
-          onFilterChange={handleFilterChange} 
-          dateRange={dateRange} 
-          monthRange={monthRange}
-          selectedPractitioner={selectedPractitioner}
-          selectedProgram={selectedProgram}
-          selectedLocation={selectedLocation}
-        />
-        
         <FilterIndicator
           dateRange={dateRange}
           monthRange={monthRange}
           practitioner={selectedPractitioner}
           program={selectedProgram}
           location={selectedLocation}
-          recordCount={sectionData.length > 0 ? sectionData.length : (activeSection === 'dashboard' ? null : 0)}
+          recordCount={null}
           onClear={handleClearFilter}
         />
         
         <div className="metrics-grid">
-          {metrics.map((metric, index) => (
-            <MetricCard key={index} metric={metric} />
-          ))}
+          {metrics.length > 0 ? (
+            metrics.map((metric, index) => (
+              <MetricCard key={index} metric={metric} />
+            ))
+          ) : (
+            <EmptyState 
+              icon="📊" 
+              title="No Metrics Available"
+              message="There are no metrics to display. Try adjusting your filters."
+            />
+          )}
         </div>
 
         <div className="charts-grid-top">
-          <TopUsers data={topUsers} onViewData={() => handleViewData('Top Users')} />
-          <ActiveUsers data={activeUsers} onViewData={() => handleViewData('Active Users')} />
-          <StaffSpeaking data={staffSpeaking} onViewData={() => handleViewData('Staff Speaking')} />
+          <TopUsers 
+            data={topUsers} 
+            loading={loading}
+            onViewData={() => handleViewData('Top Users', topUsers, ['name', 'visits', 'total_time'])} 
+          />
+          <ActiveUsers 
+            data={activeUsers} 
+            loading={loading}
+            onViewData={() => handleViewData('Active Users', [activeUsers], ['active', 'enabled'])} 
+          />
+          <StaffSpeaking 
+            data={staffSpeaking} 
+            loading={loading}
+            onViewData={() => handleViewData('Staff Speaking', [staffSpeaking], ['staff', 'nonStaff'])} 
+          />
         </div>
 
         <div className="charts-grid-bottom">
-          <TimesChart data={timesData} />
-          <ConsentsChart data={consentsData} onViewData={() => handleViewData('Consents')} />
+          <TimesChart data={timesData} loading={loading} />
+          <ConsentsChart 
+            data={consentsData} 
+            loading={loading}
+            onViewData={() => handleViewData('Consents', [consentsData], ['listening', 'dictation'])} 
+          />
         </div>
       </>
     )
@@ -360,12 +405,32 @@ function App() {
         onSettings={handleSettings}
         onEdit={handleEdit}
       />
-      <Header />
+      <Header 
+        dateRange={dateRange}
+        monthRange={monthRange}
+        selectedPractitioner={selectedPractitioner}
+        selectedProgram={selectedProgram}
+        selectedLocation={selectedLocation}
+        onFilterChange={handleFilterChange}
+        onClearFilters={handleClearFilters}
+      />
       <div className="main-content">
         <div className="content-wrapper">
           {renderContent()}
         </div>
       </div>
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={modalData.title}
+        size="large"
+      >
+        <DataTable
+          data={modalData.data}
+          columns={modalData.columns}
+          title=""
+        />
+      </Modal>
     </div>
   )
 }

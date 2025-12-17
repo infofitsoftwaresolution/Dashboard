@@ -1,19 +1,30 @@
 import React from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
+import ChartWrapper from './ChartWrapper'
+import SkeletonLoader from './SkeletonLoader'
 import './ChartCard.css'
 
-function ConsentsChart({ data, onViewData }) {
+function ConsentsChart({ data, onViewData, loading = false }) {
   const COLORS = ['#3498db', '#ff9800']
+
+  if (loading) {
+    return <SkeletonLoader type="chart" />
+  }
 
   if (!data || (data.listening === 0 && data.dictation === 0)) {
     return (
-      <div className="chart-card">
-        <div className="chart-header">
-          <h3>Consents</h3>
-          {onViewData && <button className="view-data-btn" onClick={onViewData}>View Data</button>}
-        </div>
-        <div className="no-data">No data available</div>
-      </div>
+      <ChartWrapper
+        title="Consents"
+        empty={true}
+        emptyMessage="No consent data available."
+        headerAction={
+          onViewData && (
+            <button className="view-data-btn" onClick={onViewData} title="View detailed data">
+              View Data
+            </button>
+          )
+        }
+      />
     )
   }
 
@@ -23,12 +34,18 @@ function ConsentsChart({ data, onViewData }) {
   ]
 
   return (
-    <div className="chart-card">
-      <div className="chart-header">
-        <h3>Consents</h3>
-        {onViewData && <button className="view-data-btn" onClick={onViewData}>View Data</button>}
-      </div>
-      <ResponsiveContainer width="100%" height={300}>
+    <ChartWrapper
+      title="Consents"
+      tooltip="Shows the breakdown of consent types: Listening Session vs Dictation Session."
+      headerAction={
+        onViewData && (
+          <button className="view-data-btn" onClick={onViewData} title="View detailed data">
+            View Data
+          </button>
+        )
+      }
+    >
+      <ResponsiveContainer width="100%" height={240}>
         <PieChart>
           <Pie
             data={chartData}
@@ -36,7 +53,7 @@ function ConsentsChart({ data, onViewData }) {
             cy="50%"
             labelLine={false}
             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            outerRadius={100}
+            outerRadius={85}
             fill="#8884d8"
             dataKey="value"
           >
@@ -44,11 +61,14 @@ function ConsentsChart({ data, onViewData }) {
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip 
+            formatter={(value) => [value, 'Sessions']}
+            labelFormatter={(label) => `${label} Consents`}
+          />
           <Legend />
         </PieChart>
       </ResponsiveContainer>
-    </div>
+    </ChartWrapper>
   )
 }
 

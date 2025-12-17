@@ -28,20 +28,13 @@ function Sidebar({ activeSection, onSectionChange, onSettings, onEdit }) {
               >
                 <span className="sidebar-icon">{report.icon}</span>
                 <span className="sidebar-label">{report.label}</span>
+                {activeSection === report.id && report.id === 'dashboard' && (
+                  <span className="active-indicator"></span>
+                )}
               </button>
             </li>
           ))}
         </ul>
-      </div>
-      <div className="sidebar-footer">
-        <button className="sidebar-item" onClick={onSettings}>
-          <span className="sidebar-icon">⚙️</span>
-          <span className="sidebar-label">Settings</span>
-        </button>
-        <button className="sidebar-item" onClick={onEdit}>
-          <span className="sidebar-icon">✏️</span>
-          <span className="sidebar-label">Edit</span>
-        </button>
       </div>
     </div>
   )

@@ -1,16 +1,36 @@
 import React from 'react'
+import Card from './Card'
+import SkeletonLoader from './SkeletonLoader'
+import EmptyState from './EmptyState'
 import './ChartCard.css'
 
-function TopUsers({ data, onViewData }) {
+function TopUsers({ data, onViewData, loading = false }) {
+  if (loading) {
+    return <SkeletonLoader type="chart" />
+  }
+
   return (
-    <div className="chart-card">
-      <div className="chart-header">
-        <h3>Top Users</h3>
-        {onViewData && <button className="view-data-btn" onClick={onViewData}>View Data</button>}
-      </div>
-      <div className="top-users-list">
-        {data && data.length > 0 ? (
-          data.map((user, index) => (
+    <Card
+      title="Top Users"
+      headerAction={
+        onViewData && (
+          <button className="view-data-btn" onClick={onViewData} title="View detailed data">
+            View Data
+          </button>
+        )
+      }
+      empty={!data || data.length === 0}
+      emptyState={
+        <EmptyState 
+          icon="👥" 
+          title="No Users Data"
+          message="There are no top users to display."
+        />
+      }
+    >
+      {data && data.length > 0 && (
+        <div className="top-users-list">
+          {data.map((user, index) => (
             <div key={index} className="user-item">
               <div className="user-name">{user.name}</div>
               <div className="user-stats">
@@ -18,12 +38,10 @@ function TopUsers({ data, onViewData }) {
                 {user.totalTime && <span>Total Time: {user.totalTime}</span>}
               </div>
             </div>
-          ))
-        ) : (
-          <div className="no-data">No data available</div>
-        )}
-      </div>
-    </div>
+          ))}
+        </div>
+      )}
+    </Card>
   )
 }
 

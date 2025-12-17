@@ -1,22 +1,30 @@
 import React from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
+import ChartWrapper from './ChartWrapper'
+import SkeletonLoader from './SkeletonLoader'
 import './ChartCard.css'
 
-function ActiveUsers({ data, onViewData }) {
+function ActiveUsers({ data, onViewData, loading = false }) {
   const COLORS = ['#3498db', '#95a5a6']
+
+  if (loading) {
+    return <SkeletonLoader type="chart" />
+  }
 
   if (!data || (data.active === 0 && data.enabled === 0)) {
     return (
-      <div className="chart-card">
-        <div className="chart-header">
-          <h3>Active vs Enabled Users</h3>
-          {onViewData && <button className="view-data-btn" onClick={onViewData}>View Data</button>}
-        </div>
-        <div className="no-chart-data">
-          <div className="no-data-icon">👤</div>
-          <p>No data available to show the chart.</p>
-        </div>
-      </div>
+      <ChartWrapper
+        title="Active vs Enabled Users"
+        empty={true}
+        emptyMessage="No user data available to display."
+        headerAction={
+          onViewData && (
+            <button className="view-data-btn" onClick={onViewData} title="View detailed data">
+              View Data
+            </button>
+          )
+        }
+      />
     )
   }
 
@@ -27,12 +35,18 @@ function ActiveUsers({ data, onViewData }) {
   ]
 
   return (
-    <div className="chart-card">
-      <div className="chart-header">
-        <h3>Active vs Enabled Users</h3>
-        {onViewData && <button className="view-data-btn" onClick={onViewData}>View Data</button>}
-      </div>
-      <ResponsiveContainer width="100%" height={250}>
+    <ChartWrapper
+      title="Active vs Enabled Users"
+      tooltip="Shows the breakdown of active users versus inactive users in the system."
+      headerAction={
+        onViewData && (
+          <button className="view-data-btn" onClick={onViewData} title="View detailed data">
+            View Data
+          </button>
+        )
+      }
+    >
+      <ResponsiveContainer width="100%" height={200}>
         <PieChart>
           <Pie
             data={chartData}
@@ -40,7 +54,7 @@ function ActiveUsers({ data, onViewData }) {
             cy="50%"
             labelLine={false}
             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            outerRadius={80}
+            outerRadius={70}
             fill="#8884d8"
             dataKey="value"
           >
@@ -48,11 +62,14 @@ function ActiveUsers({ data, onViewData }) {
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip 
+            formatter={(value) => [value, 'Users']}
+            labelFormatter={(label) => `${label} Users`}
+          />
           <Legend />
         </PieChart>
       </ResponsiveContainer>
-    </div>
+    </ChartWrapper>
   )
 }
 

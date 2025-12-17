@@ -6,14 +6,19 @@
 
 .main-content {
   margin-left: 240px;
-  margin-top: 60px;
+  margin-top: 0;
   flex: 1;
-  min-height: calc(100vh - 60px);
+  min-height: 100vh;
+  padding-top: 82px;
+  box-sizing: border-box;
 }
 
 .content-wrapper {
-  padding: 30px;
+  padding: 24px 30px;
   max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .page-header {
@@ -50,9 +55,10 @@
 
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
+  align-items: stretch;
 }
 
 .charts-grid-top {
@@ -60,12 +66,14 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 20px;
+  align-items: stretch;
 }
 
 .charts-grid-bottom {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  align-items: stretch;
 }
 
 .loading-container {

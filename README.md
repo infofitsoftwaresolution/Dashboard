@@ -285,9 +285,25 @@ The built files will be in the `frontend/dist` directory.
 ### Serve Frontend with Backend
 You can serve the built frontend files using the FastAPI backend or any static file server.
 
-## Database Schema
+## Database
 
-The application uses SQLite with the following main tables:
+The application supports both **SQLite** (default for development) and **PostgreSQL** (for production/AWS RDS).
+
+### Database Migration
+
+To migrate from SQLite to PostgreSQL (AWS RDS), see the [Migration Guide](backend/MIGRATION_GUIDE.md).
+
+**Quick Migration:**
+```bash
+cd backend
+python migrate_to_postgres.py
+# Or use the interactive version:
+python quick_migrate.py
+```
+
+### Database Schema
+
+The application uses the following main tables:
 - `metrics` - Dashboard metrics
 - `top_users` - Top users data
 - `audit_items` - Audit log entries

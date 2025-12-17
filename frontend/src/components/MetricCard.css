@@ -1,31 +1,84 @@
 .metric-card {
   background: white;
-  padding: 20px;
+  padding: 24px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #2ecc71);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.metric-card:hover::before {
+  opacity: 1;
 }
 
 .metric-label {
   color: #7f8c8d;
-  font-size: 0.85rem;
-  margin-bottom: 8px;
+  font-size: 0.875rem;
+  margin-bottom: 12px;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .metric-value {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 700;
   color: #2c3e50;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   line-height: 1.2;
 }
 
 .metric-change {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .change-percent {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.metric-change[style*="rgb(39, 174, 96)"] .change-percent {
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+.metric-change[style*="rgb(231, 76, 60)"] .change-percent {
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+@media (max-width: 768px) {
+  .metric-card {
+    padding: 20px;
+  }
+  
+  .metric-value {
+    font-size: 1.75rem;
+  }
 }
 

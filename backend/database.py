@@ -3,15 +3,47 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import os
+from dotenv import load_dotenv
 
-# Database URL
-DATABASE_URL = "sqlite:///./dashboard.db"
+# Load environment variables
+load_dotenv()
 
-# Create engine
+# Database URL - supports both SQLite and PostgreSQL
+# Priority: POSTGRES_URL > individual POSTGRES_* vars > SQLite default
+def get_database_url():
+    """Get database URL from environment or use SQLite default"""
+    # Check for full PostgreSQL URL
+    postgres_url = os.getenv("POSTGRES_URL")
+    if postgres_url:
+        return postgres_url
+    
+    # Check if PostgreSQL should be used
+    use_postgres = os.getenv("USE_POSTGRES", "false").lower() == "true"
+    if use_postgres:
+        # Construct PostgreSQL URL from individual components
+        host = os.getenv("POSTGRES_HOST", "database-1.cpueg8cau0g0.us-east-1.rds.amazonaws.com")
+        port = os.getenv("POSTGRES_PORT", "5432")
+        database = os.getenv("POSTGRES_DB", "postgres")
+        username = os.getenv("POSTGRES_USER")
+        password = os.getenv("POSTGRES_PASSWORD")
+        
+        if username and password:
+            return f"postgresql://{username}:{password}@{host}:{port}/{database}"
+    
+    # Default to SQLite
+    return "sqlite:///./dashboard.db"
+
+DATABASE_URL = get_database_url()
+
+# Create engine with appropriate connection args
+is_postgres = DATABASE_URL.startswith("postgresql://")
+connect_args = {} if is_postgres else {"check_same_thread": False}  # SQLite needs this
+
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},  # Needed for SQLite
-    echo=False
+    connect_args=connect_args,
+    echo=False,
+    pool_pre_ping=True if is_postgres else False  # Verify PostgreSQL connections
 )
 
 # Create session factory

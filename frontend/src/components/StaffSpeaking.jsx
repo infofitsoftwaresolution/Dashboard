@@ -1,19 +1,30 @@
 import React from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
+import ChartWrapper from './ChartWrapper'
+import SkeletonLoader from './SkeletonLoader'
 import './ChartCard.css'
 
-function StaffSpeaking({ data, onViewData }) {
+function StaffSpeaking({ data, onViewData, loading = false }) {
   const COLORS = ['#ff9800', '#3498db']
+
+  if (loading) {
+    return <SkeletonLoader type="chart" />
+  }
 
   if (!data || (data.staff === 0 && data.nonStaff === 0)) {
     return (
-      <div className="chart-card">
-        <div className="chart-header">
-          <h3>Staff Speaking</h3>
-          {onViewData && <button className="view-data-btn" onClick={onViewData}>View Data</button>}
-        </div>
-        <div className="no-data">No data available</div>
-      </div>
+      <ChartWrapper
+        title="Staff Speaking"
+        empty={true}
+        emptyMessage="No staff speaking data available."
+        headerAction={
+          onViewData && (
+            <button className="view-data-btn" onClick={onViewData} title="View detailed data">
+              View Data
+            </button>
+          )
+        }
+      />
     )
   }
 
@@ -23,12 +34,18 @@ function StaffSpeaking({ data, onViewData }) {
   ]
 
   return (
-    <div className="chart-card">
-      <div className="chart-header">
-        <h3>Staff Speaking</h3>
-        {onViewData && <button className="view-data-btn" onClick={onViewData}>View Data</button>}
-      </div>
-      <ResponsiveContainer width="100%" height={250}>
+    <ChartWrapper
+      title="Staff Speaking"
+      tooltip="Shows the breakdown of speaking time between staff and non-staff members."
+      headerAction={
+        onViewData && (
+          <button className="view-data-btn" onClick={onViewData} title="View detailed data">
+            View Data
+          </button>
+        )
+      }
+    >
+      <ResponsiveContainer width="100%" height={200}>
         <PieChart>
           <Pie
             data={chartData}
@@ -36,7 +53,7 @@ function StaffSpeaking({ data, onViewData }) {
             cy="50%"
             labelLine={false}
             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            outerRadius={80}
+            outerRadius={70}
             fill="#8884d8"
             dataKey="value"
           >
@@ -44,11 +61,14 @@ function StaffSpeaking({ data, onViewData }) {
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip 
+            formatter={(value) => [value, 'Sessions']}
+            labelFormatter={(label) => `${label} Speaking`}
+          />
           <Legend />
         </PieChart>
       </ResponsiveContainer>
-    </div>
+    </ChartWrapper>
   )
 }
 
