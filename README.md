@@ -1,369 +1,301 @@
-# Dashboard Application
+# 🏥 Healthcare Dashboard Application
 
-A comprehensive healthcare dashboard application built with React (frontend) and FastAPI (backend), featuring SQLite database, real-time filtering, and interactive data visualizations.
+A modern, full‑stack **healthcare analytics dashboard** built with **React** (frontend) and **FastAPI** (backend). It helps admins track activity, usage, and performance through real‑time metrics, interactive charts, and advanced filtering — all backed by a SQLite or PostgreSQL database.
 
-## Features
+Think of it as a **ready‑to‑use analytics system** you can run locally, extend, or deploy to production.
 
-- **Real-time Metrics Dashboard**: Key performance indicators with trend indicators
-- **Interactive Charts**: Multiple chart types (Line, Bar, Pie, Area) using Recharts
-- **Advanced Filtering**: 
-  - Date range and month range filtering
-  - Practitioner, Program, and Location filters
-  - Real-time data updates
-- **SQLite Database**: Persistent data storage with one year of sample data
-- **Multiple Report Sections**: 
-  - Audit Summary
-  - Patient Access
-  - Signed/Unsigned Notes
-  - Practitioner Usage
-  - Sync Issues
-  - And more...
-- **Responsive Design**: Works on desktop and mobile devices
+---
 
-## Prerequisites
+## ✨ What This App Can Do
 
-Before you begin, ensure you have the following installed:
+* 📊 **Real‑time Dashboard Metrics**
+  See key numbers at a glance with trend indicators
 
-- **Python 3.8+** - [Download Python](https://www.python.org/downloads/)
-- **Node.js 16+** and npm - [Download Node.js](https://nodejs.org/)
-- **Git** - [Download Git](https://git-scm.com/downloads)
+* 📈 **Interactive Charts**
+  Line, Bar, Pie, and Area charts powered by Recharts
 
-## Project Structure
+* 🔍 **Smart Filters**
+
+  * Date & month range filters
+  * Practitioner, Program, and Location filters
+  * All updates happen instantly
+
+* 🗄️ **Persistent Database**
+
+  * SQLite for development
+  * PostgreSQL (AWS RDS ready) for production
+
+* 📑 **Multiple Reports**
+
+  * Audit Summary
+  * Patient Access
+  * Signed / Unsigned Notes
+  * Practitioner Usage
+  * Sync Issues and more
+
+* 📱 **Responsive UI**
+  Works smoothly on desktop and mobile
+
+---
+
+## 🧰 Tech Stack
+
+### Backend
+
+* FastAPI
+* SQLAlchemy
+* SQLite / PostgreSQL
+* Pydantic
+* Uvicorn
+
+### Frontend
+
+* React 18
+* Vite
+* Recharts
+* Axios
+
+---
+
+## 📁 Project Structure
 
 ```
-.
+Dashboard/
 ├── backend/
-│   ├── main.py              # FastAPI application
-│   ├── database.py          # SQLAlchemy models and database setup
-│   ├── seed_data.py         # Database seeding script
-│   ├── requirements.txt     # Python dependencies
-│   └── .gitignore           # Backend gitignore
+│   ├── main.py
+│   ├── database.py
+│   ├── seed_data.py
+│   ├── requirements.txt
+│   └── .gitignore
 ├── frontend/
 │   ├── src/
-│   │   ├── components/      # React components
-│   │   ├── App.jsx          # Main app component
-│   │   └── main.jsx         # Entry point
-│   ├── package.json         # Node dependencies
-│   └── vite.config.js       # Vite configuration
+│   │   ├── components/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
 └── README.md
 ```
 
-## Quick Start
+---
 
-### 1. Clone the Repository
+## 🚀 Quick Start (Local Setup)
+
+### 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/Shubham96681/Dashboard.git
 cd Dashboard
 ```
 
-### 2. Backend Setup
+---
 
-#### Step 1: Navigate to backend directory
+## ⚙️ Backend Setup (FastAPI)
+
+### Step 1: Go to backend folder
+
 ```bash
 cd backend
 ```
 
-#### Step 2: Create a virtual environment (recommended)
+### Step 2: Create & activate virtual environment
+
+**Windows**
+
 ```bash
-# Windows
 python -m venv venv
 venv\Scripts\activate
+```
 
-# Linux/Mac
+**Linux / Mac**
+
+```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-#### Step 3: Install Python dependencies
+### Step 3: Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-#### Step 4: Initialize and seed the database
+### Step 4: Seed the database
+
 ```bash
 python seed_data.py
 ```
 
-This will:
-- Create the SQLite database (`dashboard.db`)
-- Create all necessary tables
-- Populate the database with one year of sample data
+✔ Creates database
+✔ Creates tables
+✔ Adds 1 year of sample data
 
-**Expected output:**
-```
-Database seeded successfully!
-```
+### Step 5: Run the backend server
 
-#### Step 5: Start the FastAPI server
 ```bash
 python main.py
 ```
 
-The backend will be available at `http://localhost:8000`
+Backend runs at:
 
-**You should see:**
 ```
-INFO:     Uvicorn running on http://127.0.0.1:8000
-INFO:     Application startup complete.
+http://localhost:8000
 ```
 
-### 3. Frontend Setup
+---
 
-Open a **new terminal window** (keep the backend running) and:
+## 🎨 Frontend Setup (React)
 
-#### Step 1: Navigate to frontend directory
+Open a **new terminal** and:
+
+### Step 1: Go to frontend folder
+
 ```bash
 cd frontend
 ```
 
-#### Step 2: Install Node dependencies
+### Step 2: Install dependencies
+
 ```bash
 npm install
 ```
 
-This may take a few minutes on first run.
+### Step 3: Start development server
 
-#### Step 3: Start the development server
 ```bash
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173`
+Frontend runs at:
 
-**You should see:**
-```
-  VITE v5.x.x  ready in xxx ms
-
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose
-```
-
-### 4. Access the Application
-
-Open your browser and navigate to:
 ```
 http://localhost:5173
 ```
 
-## Troubleshooting
+---
 
-### Backend Issues
+## 🌐 Open the App
 
-**Problem: `ModuleNotFoundError` or `No module named 'fastapi'`**
+Just open your browser and go to:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🔌 API Overview
+
+### Health & Metrics
+
+* `GET /` – API health check
+* `GET /api/metrics`
+* `GET /api/top-users`
+* `GET /api/active-users`
+
+### Filters
+
+* `GET /api/filter-options`
+
+### Reports (supports filters)
+
+* `/api/audit-summary`
+* `/api/patient-access`
+* `/api/signed-notes`
+* `/api/unsigned-notes`
+* `/api/practitioner-service-usage`
+* `/api/sync-issues`
+
+*All endpoints support practitioner, program, location, and date filters.*
+
+---
+
+## 🧪 Sample Data Included
+
+* 📆 1 year of historical data
+* 👨‍⚕️ 5 practitioners
+* 🏥 6 programs
+* 📍 5 locations
+* 📊 15,000+ records automatically generated
+
+Perfect for demos, testing, and interviews.
+
+---
+
+## 🐞 Common Issues & Fixes
+
+### Backend not starting?
+
 ```bash
-# Make sure virtual environment is activated
-# Windows: venv\Scripts\activate
-# Linux/Mac: source venv/bin/activate
-
-# Reinstall dependencies
 pip install -r requirements.txt
 ```
 
-**Problem: `database.db` not found or empty**
+### No data showing?
+
 ```bash
-# Run the seed script
 python seed_data.py
 ```
 
-**Problem: Port 8000 already in use**
-```bash
-# Option 1: Stop the process using port 8000
-# Option 2: Change port in main.py (last line)
-#   uvicorn.run(app, host="0.0.0.0", port=8001)
-```
+### Frontend not connecting to backend?
 
-### Frontend Issues
+* Make sure backend is running on `localhost:8000`
+* Check browser console for CORS errors
 
-**Problem: `npm: command not found`**
-- Install Node.js from [nodejs.org](https://nodejs.org/)
+---
 
-**Problem: `node_modules` errors**
-```bash
-# Delete node_modules and reinstall
-rm -rf node_modules  # Linux/Mac
-rmdir /s node_modules  # Windows
-npm install
-```
+## 🏗️ Production Build
 
-**Problem: Port 5173 already in use**
-```bash
-# Vite will automatically use the next available port
-# Or specify a different port:
-npm run dev -- --port 3000
-```
+### Build frontend
 
-**Problem: Cannot connect to backend API**
-- Make sure the backend is running on `http://localhost:8000`
-- Check browser console for CORS errors
-- Verify backend is accessible: `http://localhost:8000/`
-
-### Database Issues
-
-**Problem: Database is empty or shows no data**
-```bash
-cd backend
-python seed_data.py
-```
-
-**Problem: Database locked error**
-- Close any other processes accessing the database
-- Restart the backend server
-
-## API Endpoints
-
-### Dashboard Endpoints
-- `GET /` - API health check
-- `GET /api/metrics` - Get dashboard metrics
-- `GET /api/top-users` - Get top users
-- `GET /api/active-users` - Get active users count
-- `GET /api/staff-speaking` - Get staff speaking data
-- `GET /api/times` - Get time metrics
-- `GET /api/consents` - Get consents data
-
-### Filter Endpoints
-- `GET /api/filter-options` - Get available filter options (practitioners, programs, locations)
-
-### Report Endpoints (with filtering support)
-- `GET /api/audit-summary?practitioner=...&program=...&location=...&start_date=...&end_date=...`
-- `GET /api/patient-access?practitioner=...&program=...&location=...&start_date=...&end_date=...`
-- `GET /api/signed-notes?practitioner=...&program=...&location=...&start_date=...&end_date=...`
-- `GET /api/unsigned-notes?practitioner=...&program=...&location=...&start_date=...&end_date=...`
-- `GET /api/practitioner-service-usage?practitioner=...&program=...&location=...`
-- `GET /api/sync-issues?start_date=...&end_date=...`
-- And more...
-
-## Technologies Used
-
-### Backend
-- **FastAPI** - Modern Python web framework
-- **SQLAlchemy** - SQL toolkit and ORM
-- **SQLite** - Lightweight database
-- **Uvicorn** - ASGI server
-- **Pydantic** - Data validation
-
-### Frontend
-- **React 18** - UI library
-- **Vite** - Build tool and dev server
-- **Recharts** - Chart library
-- **Axios** - HTTP client
-
-## Development
-
-### Running Both Servers
-
-You need to run both backend and frontend servers simultaneously:
-
-**Terminal 1 (Backend):**
-```bash
-cd backend
-venv\Scripts\activate  # or source venv/bin/activate on Linux/Mac
-python main.py
-```
-
-**Terminal 2 (Frontend):**
-```bash
-cd frontend
-npm run dev
-```
-
-### Making Changes
-
-- **Backend changes**: Restart the FastAPI server (`Ctrl+C` then `python main.py`)
-- **Frontend changes**: Vite will hot-reload automatically
-
-## Production Build
-
-### Build Frontend
 ```bash
 cd frontend
 npm run build
 ```
 
-The built files will be in the `frontend/dist` directory.
+Output will be in:
 
-### Serve Frontend with Backend
-You can serve the built frontend files using the FastAPI backend or any static file server.
-
-## Database
-
-The application supports both **SQLite** (default for development) and **PostgreSQL** (for production/AWS RDS).
-
-### Database Migration
-
-To migrate from SQLite to PostgreSQL (AWS RDS), see the [Migration Guide](backend/MIGRATION_GUIDE.md).
-
-**Quick Migration:**
-```bash
-cd backend
-python migrate_to_postgres.py
-# Or use the interactive version:
-python quick_migrate.py
+```
+frontend/dist
 ```
 
-### Database Schema
-
-The application uses the following main tables:
-- `metrics` - Dashboard metrics
-- `top_users` - Top users data
-- `audit_items` - Audit log entries
-- `patient_access_items` - Patient access records
-- `signed_note_items` - Signed notes
-- `unsigned_note_items` - Unsigned notes
-- `practitioner_usage_items` - Practitioner usage statistics
-- And more...
-
-## Filtering Features
-
-### Date/Month Range Filtering
-- Select "Last 3 Months" for quick filter
-- Use calendar icon to select custom date or month ranges
-- All charts and tables update in real-time
-
-### Practitioner/Program/Location Filtering
-- Click Practitioner/Program/Location buttons
-- Select from dropdown menus
-- Multiple filters can be combined
-- Clear individual filters or all at once
-
-## Sample Data
-
-The database is seeded with:
-- **One year** of historical data
-- **5 Practitioners** with distinct data patterns:
-  - DR JANE SMITH (Cardiology) - 4,791 notes
-  - DR JOHN DOE (Pediatrics) - 3,168 notes
-  - DR SARAH JOHNSON (Orthopedics/Neurology) - 5,526 notes
-  - DR MICHAEL BROWN (Dermatology) - 2,535 notes
-  - DR EMILY DAVIS (Neurology/Cardiology) - 3,619 notes
-- **6 Programs**: Cardiology, Primary Care, Pediatrics, Orthopedics, Neurology, Dermatology
-- **5 Locations**: Main Clinic, Downtown Office, North Branch, South Branch, Emergency Dept
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is open source and available for use.
-
-## Support
-
-If you encounter any issues:
-1. Check the Troubleshooting section above
-2. Verify all prerequisites are installed
-3. Ensure both backend and frontend servers are running
-4. Check browser console for errors
-5. Verify database was seeded successfully
-
-## Author
-
-Shubham96681
+You can serve this using FastAPI or any static server.
 
 ---
 
-**Happy Coding! 🚀**
+## ☁️ PostgreSQL & AWS RDS Support
+
+The app supports **PostgreSQL for production**.
+
+* Configure RDS security group (port 5432)
+* Add credentials in `.env`
+* Set `USE_POSTGRES=true`
+* Seed database using:
+
+```bash
+python seed_postgresql.py
+```
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Create a feature branch
+3. Commit changes
+4. Push and open a PR
+
+---
+
+## 📜 License
+
+Open‑source and free to use.
+
+---
+
+## 👤 Author
+
+**Shubham96681**
+
+---
+
+Happy coding! 🚀
