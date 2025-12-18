@@ -13,11 +13,23 @@ os.environ["USE_POSTGRES"] = "true"
 load_dotenv()
 
 # Verify PostgreSQL credentials are set
-host = os.getenv("POSTGRES_HOST", "database-1.cpueg8cau0g0.us-east-1.rds.amazonaws.com")
+host = os.getenv("POSTGRES_HOST")
 port = os.getenv("POSTGRES_PORT", "5432")
-database = os.getenv("POSTGRES_DB", "BVSTestDatabase")
-username = os.getenv("POSTGRES_USER", "postgres")
-password = os.getenv("POSTGRES_PASSWORD", "Awesome!1234")
+database = os.getenv("POSTGRES_DB")
+username = os.getenv("POSTGRES_USER")
+password = os.getenv("POSTGRES_PASSWORD")
+
+# Check if required credentials are provided
+if not all([host, database, username, password]):
+    print("❌ Missing required PostgreSQL credentials!")
+    print("\n📋 Please set the following in your .env file:")
+    print("   POSTGRES_HOST=your-rds-endpoint.rds.amazonaws.com")
+    print("   POSTGRES_PORT=5432")
+    print("   POSTGRES_DB=your_database_name")
+    print("   POSTGRES_USER=your_username")
+    print("   POSTGRES_PASSWORD=your_password")
+    print("\n💡 See README.md for detailed setup instructions")
+    sys.exit(1)
 
 print("=" * 60)
 print("PostgreSQL Database Seeding")
@@ -49,10 +61,11 @@ try:
 except Exception as e:
     print(f"❌ Connection failed: {str(e)}")
     print("\n🔍 Troubleshooting:")
-    print("  1. Verify your IP (223.185.31.191/32) is in RDS Security Group")
+    print("  1. Verify your IP is added to RDS Security Group (port 5432)")
     print("  2. Check if database is publicly accessible")
     print("  3. Wait 1-2 minutes after updating security group")
-    print("\n💡 See backend/AWS_SECURITY_GROUP_SETUP.md for detailed instructions")
+    print("  4. Verify credentials are correct in .env file")
+    print("\n💡 See README.md for detailed AWS RDS setup instructions")
     sys.exit(1)
 
 # Now seed the database

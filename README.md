@@ -1,10 +1,3 @@
-# 🏥 Healthcare Dashboard Application
-
-A modern, full‑stack **healthcare analytics dashboard** built with **React** (frontend) and **FastAPI** (backend). It helps admins track activity, usage, and performance through real‑time metrics, interactive charts, and advanced filtering — all backed by a SQLite or PostgreSQL database.
-
-Think of it as a **ready‑to‑use analytics system** you can run locally, extend, or deploy to production.
-
----
 
 ## ✨ What This App Can Do
 
@@ -84,7 +77,7 @@ Dashboard/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/Shubham96681/Dashboard.git
+git clone https://github.com/infofitsoftwaresolution/Dashboard.git
 cd Dashboard
 ```
 
@@ -294,7 +287,7 @@ Open‑source and free to use.
 
 ## 👤 Author
 
-**Shubham96681**
+**infofitsoftware**
 
 ---
 
