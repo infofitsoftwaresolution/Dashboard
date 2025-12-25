@@ -58,5 +58,13 @@ coverage/
 *.tmp
 *.temp
 
+# Parquet files (should be in S3, not in repo)
+*.parquet
+
+# AWS credentials (never commit these!)
+*.pem
+*.key
+credentials
+
 
 

@@ -4,6 +4,7 @@ import './Sidebar.css'
 function Sidebar({ activeSection, onSectionChange, onSettings, onEdit }) {
   const reports = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'athena', label: 'Athena Data View', icon: '☁️' },
     { id: 'audit', label: 'Audit Summary', icon: '📋' },
     { id: 'patient-access', label: 'Patient Access', icon: '👤' },
     { id: 'patient-service', label: 'Patient Service Usage', icon: '🏥' },

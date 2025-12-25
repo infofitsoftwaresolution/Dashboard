@@ -13,10 +13,11 @@
   * Practitioner, Program, and Location filters
   * All updates happen instantly
 
-* 🗄️ **Persistent Database**
+* ☁️ **AWS Athena Integration**
 
-  * SQLite for development
-  * PostgreSQL (AWS RDS ready) for production
+  * Direct querying of S3 Parquet files
+  * No local database required
+  * Real-time data from S3
 
 * 📑 **Multiple Reports**
 
@@ -36,8 +37,8 @@
 ### Backend
 
 * FastAPI
-* SQLAlchemy
-* SQLite / PostgreSQL
+* AWS Athena (S3 Parquet queries)
+* Boto3 (AWS SDK)
 * Pydantic
 * Uvicorn
 
@@ -53,13 +54,13 @@
 ## 📁 Project Structure
 
 ```
-Dashboard/
+new_project/
 ├── backend/
-│   ├── main.py
-│   ├── database.py
-│   ├── seed_data.py
+│   ├── main.py              # FastAPI application
+│   ├── athena_service.py    # Athena query service
 │   ├── requirements.txt
-│   └── .gitignore
+│   ├── env.example          # Environment template
+│   └── verify_parquet_files.py
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
@@ -67,7 +68,13 @@ Dashboard/
 │   │   └── main.jsx
 │   ├── package.json
 │   └── vite.config.js
-└── README.md
+├── athena/
+│   ├── create_table_ACTUAL.sql
+│   ├── create_view.sql
+│   └── ...
+├── README.md
+├── QUICK_START.md
+└── SETUP.md
 ```
 
 ---
@@ -113,17 +120,37 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Step 4: Seed the database
+### Step 4: Configure AWS credentials
+
+Copy `env.example` to `.env` and fill in your AWS credentials:
 
 ```bash
-python seed_data.py
+copy env.example .env  # Windows
+cp env.example .env    # Linux/Mac
 ```
 
-✔ Creates database
-✔ Creates tables
-✔ Adds 1 year of sample data
+Edit `.env` with your AWS credentials:
+```env
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_REGION=us-east-1
+S3_BUCKET_NAME=your-bucket-name
+S3_PREFIX=audit-trail-data/raw/
+S3_RESULTS_BUCKET=your-bucket-name
+S3_RESULTS_PREFIX=athena-results/
+ATHENA_DATABASE_NAME=audit_trail_db
+ATHENA_TABLE_NAME=audit_trail_data
+ATHENA_WORKGROUP=primary
+```
 
-### Step 5: Run the backend server
+### Step 5: Setup Athena Table
+
+1. Go to [AWS Athena Console](https://console.aws.amazon.com/athena/)
+2. Run the SQL from `athena/create_table_ACTUAL.sql`
+3. Update the S3 location to match your bucket
+4. Run `MSCK REPAIR TABLE audit_trail_data;` to refresh metadata
+
+### Step 6: Run the backend server
 
 ```bash
 python main.py
@@ -203,15 +230,14 @@ http://localhost:5173
 
 ---
 
-## 🧪 Sample Data Included
+## 📊 Data Source
 
-* 📆 1 year of historical data
-* 👨‍⚕️ 5 practitioners
-* 🏥 6 programs
-* 📍 5 locations
-* 📊 15,000+ records automatically generated
+* ☁️ **S3 Parquet Files** - All data comes from S3
+* 🔍 **Athena Queries** - Direct SQL queries on Parquet files
+* 📈 **Real-time** - No database, direct from S3
+* 🔄 **Auto-sync** - Always shows latest data from S3
 
-Perfect for demos, testing, and interviews.
+Upload your Parquet files to S3 and they'll automatically appear in the dashboard!
 
 ---
 
@@ -225,9 +251,10 @@ pip install -r requirements.txt
 
 ### No data showing?
 
-```bash
-python seed_data.py
-```
+1. Verify AWS credentials in `.env` file
+2. Check Athena table exists: Run `SELECT COUNT(*) FROM audit_trail_data;` in Athena
+3. Run `MSCK REPAIR TABLE audit_trail_data;` if you added new files
+4. Verify S3 bucket permissions
 
 ### Frontend not connecting to backend?
 
@@ -255,18 +282,45 @@ You can serve this using FastAPI or any static server.
 
 ---
 
-## ☁️ PostgreSQL & AWS RDS Support
+## ☁️ AWS Setup
 
-The app supports **PostgreSQL for production**.
+### Required AWS Services
 
-* Configure RDS security group (port 5432)
-* Add credentials in `.env`
-* Set `USE_POSTGRES=true`
-* Seed database using:
+* **S3** - Store Parquet files
+* **Athena** - Query Parquet files
+* **IAM** - User with permissions for S3 and Athena
 
-```bash
-python seed_postgresql.py
+### IAM Permissions Required
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::your-bucket-name/*",
+        "arn:aws:s3:::your-bucket-name"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "athena:*",
+        "glue:GetDatabase",
+        "glue:GetTable"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
 ```
+
+See `QUICK_START.md` for detailed setup instructions.
 
 ---
 

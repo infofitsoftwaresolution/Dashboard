@@ -22,7 +22,7 @@ function FilterBar({ onFilterChange, dateRange: propDateRange, monthRange: propM
     const fetchFilterOptions = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/filter-options`, {
-          timeout: 5000
+          timeout: 60000  // 60 seconds - Athena queries can take time
         })
         if (response.data) {
           setFilterOptions({
