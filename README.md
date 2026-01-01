@@ -1,139 +1,164 @@
-# Dashboard - AWS Athena Data Pipeline
+# 📊 AWS Athena Analytics Dashboard
 
-A modern dashboard application that queries Parquet files from AWS S3 using Athena and displays real-time analytics through a FastAPI backend and React frontend.
+A modern, high-performance analytics dashboard that directly queries Parquet data stored in AWS S3 using Athena, processes it through a FastAPI backend, and presents real-time insights via a React-based dashboard.
+
+No traditional database. No sync delays. Just fresh data straight from S3.
 
 ---
 
 ## ✨ Features
 
-- 📊 **Real-time Dashboard Metrics** - Key numbers at a glance with trend indicators
-- 📈 **Interactive Charts** - Line, Bar, Pie, and Area charts powered by Recharts
-- 🔍 **Smart Filters** - Date range, Practitioner, Program, and Location filters
-- ☁️ **AWS Athena Integration** - Direct querying of S3 Parquet files, no local database
-- 📑 **Multiple Reports** - Audit Summary, Patient Access, Signed/Unsigned Notes, and more
-- 📱 **Responsive UI** - Works smoothly on desktop and mobile
+- 📊 Real-time dashboard metrics with trend indicators  
+- 📈 Interactive charts (Line, Bar, Pie, Area) using Recharts  
+- 🔍 Advanced filters: Date range, Practitioner, Program, Location  
+- ☁️ Direct AWS Athena queries on S3 Parquet files  
+- 📑 Multiple reports: Audit Summary, Patient Access, Signed / Unsigned Notes  
+- 📱 Fully responsive UI (desktop & mobile)
 
 ---
 
 ## 🧰 Tech Stack
 
 ### Backend
-- **FastAPI** - Modern Python web framework
-- **AWS Athena** - Query S3 Parquet files with SQL
-- **Boto3** - AWS SDK for Python
-- **Pydantic** - Data validation
-- **Uvicorn** - ASGI server
+- FastAPI  
+- AWS Athena  
+- Boto3  
+- Pydantic  
+- Uvicorn  
 
 ### Frontend
-- **React 18** - UI library
-- **Vite** - Build tool
-- **Recharts** - Chart library
-- **Axios** - HTTP client
+- React 18  
+- Vite  
+- Recharts  
+- Axios  
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
 ### 1. Clone the Repository
-
 ```bash
 git clone https://github.com/infofitsoftwaresolution/Dashboard.git
 cd Dashboard
-```
+````
 
-### 2. Setup Backend
+### 2. Backend Setup
 
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate
 pip install -r requirements.txt
-copy env.example .env  # Windows
-cp env.example .env  # Linux/Mac
+copy env.example .env
 ```
 
-Edit `.env` with your AWS credentials (see `SETUP.md` for details).
+For Linux / Mac:
 
-### 3. Setup Frontend
+```bash
+source venv/bin/activate
+cp env.example .env
+```
+
+Update `.env` with your AWS credentials (see SETUP.md).
+
+---
+
+### 3. Frontend Setup
 
 ```bash
 cd frontend
 npm install
 ```
 
+---
+
 ### 4. Run the Application
 
-**Terminal 1 - Backend:**
+Backend:
+
 ```bash
 cd backend
 python main.py
 ```
 
-**Terminal 2 - Frontend:**
+Frontend:
+
 ```bash
 cd frontend
 npm run dev
 ```
 
-### 5. Access Dashboard
+---
 
-Open browser: `http://localhost:5173`
+### 5. Open Dashboard
+
+```text
+http://localhost:5173
+```
 
 ---
 
 ## 📚 Documentation
 
-- **SETUP.md** - Complete setup guide including:
-  - AWS S3 configuration
-  - AWS Athena setup
-  - All SQL queries used in the application
-  - API endpoints documentation
-  - Troubleshooting guide
+SETUP.md includes:
+
+* AWS S3 configuration
+* Athena setup
+* SQL queries used
+* API documentation
+* Troubleshooting guide
 
 ---
 
-## 📊 Data Source
+## 📊 Data Source & Flow
 
-- ☁️ **S3 Parquet Files** - All data comes from S3
-- 🔍 **Athena Queries** - Direct SQL queries on Parquet files
-- 📈 **Real-time** - No database, direct from S3
-- 🔄 **Auto-sync** - Always shows latest data from S3
+* Source: S3 Parquet files
+* Query Engine: AWS Athena
+* Database: None
+* Sync: Real-time, always latest data
 
-Upload your Parquet files to S3 and they'll automatically appear in the dashboard!
+Upload Parquet files to S3 and they appear automatically in the dashboard.
 
 ---
 
 ## 🔌 API Overview
 
-### Health Check
-- `GET /` - API health check
+### Health
+
+* GET /
 
 ### Dashboard Metrics
-- `GET /api/metrics` - Dashboard metrics
-- `GET /api/top-users` - Top users by session count
-- `GET /api/active-users` - Active user statistics
-- `GET /api/staff-speaking` - Staff speaking statistics
-- `GET /api/times` - Time-related data
-- `GET /api/consents` - Consent data
 
-### Reports (All support filters)
-- `GET /api/audit-summary`
-- `GET /api/patient-access`
-- `GET /api/signed-notes`
-- `GET /api/unsigned-notes`
-- `GET /api/practitioner-service-usage`
-- `GET /api/sync-issues`
+* GET /api/metrics
+* GET /api/top-users
+* GET /api/active-users
+* GET /api/staff-speaking
+* GET /api/times
+* GET /api/consents
 
-### Athena Endpoints
-- `GET /api/athena/data` - Query Athena data with filters
-- `GET /api/athena/summary` - Summary statistics
-- `GET /api/athena/dashboard` - Optimized dashboard data
-- `GET /api/athena/verify-files` - List Parquet files in S3
-- `GET /api/athena/repair-table` - Refresh Athena metadata
-- `POST /api/athena/query` - Execute custom queries
+### Reports (Filter Supported)
 
-**Interactive API Docs:** `http://localhost:8000/docs`
+* GET /api/audit-summary
+* GET /api/patient-access
+* GET /api/signed-notes
+* GET /api/unsigned-notes
+* GET /api/practitioner-service-usage
+* GET /api/sync-issues
+
+### Athena APIs
+
+* GET /api/athena/data
+* GET /api/athena/summary
+* GET /api/athena/dashboard
+* GET /api/athena/verify-files
+* GET /api/athena/repair-table
+* POST /api/athena/query
+
+Swagger Docs:
+
+```text
+http://localhost:8000/docs
+```
 
 ---
 
@@ -141,43 +166,55 @@ Upload your Parquet files to S3 and they'll automatically appear in the dashboar
 
 ```
 Dashboard/
-├── backend/              # FastAPI backend
-│   ├── main.py          # FastAPI application
-│   ├── athena_service.py # Athena query service
-│   └── requirements.txt # Python dependencies
-├── frontend/            # React frontend
+├── backend/
+│   ├── api/                        # All API code organized here
+│   │   ├── models.py               # Pydantic models
+│   │   └── routes/
+│   │       ├── dashboard.py         # Dashboard endpoints
+│   │       └── athena.py           # Athena endpoints
+│   ├── main.py                     # FastAPI app entry point
+│   ├── athena_service.py           # Athena service layer
+│   ├── requirements.txt
+│   └── env.example
+├── frontend/
 │   └── src/
-│       ├── components/  # React components
-│       └── App.jsx      # Main app
-├── athena/              # SQL queries
+│       ├── components/
+│       └── App.jsx
+├── athena/
 │   ├── create_table_ACTUAL.sql
 │   ├── create_view.sql
 │   └── ...
-├── README.md            # This file
-└── SETUP.md             # Complete setup guide
+├── README.md
+└── SETUP.md
 ```
 
 ---
 
 ## 🐞 Common Issues
 
-### Backend not starting?
-- Check Python version (need 3.8+)
-- Activate virtual environment
-- Install dependencies: `pip install -r requirements.txt`
-- Configure `.env` file with AWS credentials
+### Backend not starting
 
-### No data showing?
-- Verify AWS credentials in `.env` file
-- Check Athena table exists and has data
-- Run `MSCK REPAIR TABLE audit_trail_data;` in Athena
-- Verify S3 bucket permissions
+* Python 3.8+
+* Virtual environment activated
+* Dependencies installed
+* `.env` configured correctly
 
-### Frontend not connecting?
-- Ensure backend is running on `localhost:8000`
-- Check browser console for errors
+### No data showing
 
-See `SETUP.md` for detailed troubleshooting.
+* AWS credentials are valid
+* Athena table exists
+* Run:
+
+```sql
+MSCK REPAIR TABLE audit_trail_data;
+```
+
+* Check S3 permissions
+
+### Frontend not connecting
+
+* Backend running on localhost:8000
+* Check browser console
 
 ---
 
@@ -189,8 +226,8 @@ Open-source and free to use.
 
 ## 👤 Author
 
-**infofitsoftware**
+infofitsoftware
 
 ---
 
-Happy coding! 🚀
+Happy coding 🚀

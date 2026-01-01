@@ -15,6 +15,7 @@ function AthenaDataView({ dateRange, monthRange, selectedPractitioner, selectedP
   const [limit, setLimit] = useState(null) // null = ALL data
   const [fetchingAll, setFetchingAll] = useState(false)
   const [fileInfo, setFileInfo] = useState(null)
+  const [showFileInfo, setShowFileInfo] = useState(false)
 
   useEffect(() => {
     fetchAthenaData()
@@ -194,41 +195,6 @@ function AthenaDataView({ dateRange, monthRange, selectedPractitioner, selectedP
           <p className="athena-subtitle">Live data from S3 Parquet files via Athena</p>
         </div>
         
-        {fileInfo && (
-          <div className="athena-file-info" style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f0f8ff', borderRadius: '8px', border: '1px solid #4a90e2' }}>
-            <h3 style={{ margin: '0 0 10px 0', color: '#4a90e2' }}>📁 Parquet Files in S3</h3>
-            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-              <div>
-                <strong>Total Files:</strong> {fileInfo.file_count || 0}
-              </div>
-              <div>
-                <strong>Total Size:</strong> {fileInfo.total_size_bytes ? (fileInfo.total_size_bytes / (1024 * 1024)).toFixed(2) : 0} MB
-              </div>
-              <div>
-                <strong>S3 Location:</strong> <code style={{ fontSize: '12px' }}>{fileInfo.s3_location || 'N/A'}</code>
-              </div>
-            </div>
-            {fileInfo.files && fileInfo.files.length > 0 && (
-              <div style={{ marginTop: '10px' }}>
-                <strong>Files:</strong>
-                <ul style={{ margin: '5px 0 0 20px', fontSize: '12px' }}>
-                  {fileInfo.files.map((file, idx) => (
-                    <li key={idx}>
-                      {file.key.split('/').pop()} ({(file.size / 1024).toFixed(2)} KB)
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <button 
-              onClick={fetchFileInfo} 
-              style={{ marginTop: '10px', padding: '5px 10px', fontSize: '12px', cursor: 'pointer' }}
-            >
-              🔄 Refresh File List
-            </button>
-          </div>
-        )}
-        
         {summary && (
           <div className="athena-summary">
             <div className="summary-item">
@@ -266,6 +232,50 @@ function AthenaDataView({ dateRange, monthRange, selectedPractitioner, selectedP
           </div>
         )}
       </div>
+
+      {fileInfo && (
+        <div className="athena-file-info-container">
+          <button 
+            className="file-info-toggle"
+            onClick={() => setShowFileInfo(!showFileInfo)}
+          >
+            {showFileInfo ? '▼' : '▶'} 📁 Parquet Files in S3 ({fileInfo.file_count || 0} files)
+          </button>
+          {showFileInfo && (
+            <div className="athena-file-info">
+              <div className="file-info-stats">
+                <div className="file-stat">
+                  <strong>Total Files:</strong> {fileInfo.file_count || 0}
+                </div>
+                <div className="file-stat">
+                  <strong>Total Size:</strong> {fileInfo.total_size_bytes ? (fileInfo.total_size_bytes / (1024 * 1024)).toFixed(2) : 0} MB
+                </div>
+                <div className="file-stat">
+                  <strong>S3 Location:</strong> <code>{fileInfo.s3_location || 'N/A'}</code>
+                </div>
+              </div>
+              {fileInfo.files && fileInfo.files.length > 0 && (
+                <div className="file-list-container">
+                  <strong>Files:</strong>
+                  <ul className="file-list">
+                    {fileInfo.files.map((file, idx) => (
+                      <li key={idx}>
+                        {file.key.split('/').pop()} ({(file.size / 1024).toFixed(2)} KB)
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <button 
+                className="refresh-file-button"
+                onClick={fetchFileInfo} 
+              >
+                🔄 Refresh File List
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="athena-controls">
         <div className="limit-control">

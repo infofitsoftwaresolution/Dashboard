@@ -272,15 +272,15 @@ function App() {
   const getSectionTitle = (section) => {
     const titles = {
       'athena': 'Athena Data View',
-      'audit': 'Audit Summary',
-      'patient-access': 'Patient Access',
+      'audit': 'Audit Trail Summary',
+      'patient-access': 'Patient Access Logs',
       'patient-service': 'Patient Service Usage',
-      'recommendation': 'Recommendation Summary',
-      'delivery': 'Report Delivery Schedules',
-      'signed': 'Signed Notes',
-      'practitioner': 'Practitioner Service Usage',
-      'sync': 'Sync Issues',
-      'unsigned': 'Unsigned Notes'
+      'recommendation': 'Similarity Recommendations',
+      'delivery': 'Report Schedules',
+      'signed': 'Finalized Notes',
+      'practitioner': 'Practitioner Activity',
+      'sync': 'Session Sync Issues',
+      'unsigned': 'Pending Notes'
     }
     return titles[section] || 'Report'
   }

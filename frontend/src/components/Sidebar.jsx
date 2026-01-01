@@ -5,15 +5,15 @@ function Sidebar({ activeSection, onSectionChange, onSettings, onEdit }) {
   const reports = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'athena', label: 'Athena Data View', icon: '☁️' },
-    { id: 'audit', label: 'Audit Summary', icon: '📋' },
-    { id: 'patient-access', label: 'Patient Access', icon: '👤' },
+    { id: 'audit', label: 'Audit Trail Summary', icon: '📋' },
+    { id: 'patient-access', label: 'Patient Access Logs', icon: '👤' },
     { id: 'patient-service', label: 'Patient Service Usage', icon: '🏥' },
-    { id: 'recommendation', label: 'Recommendation Summary', icon: '💡' },
-    { id: 'delivery', label: 'Report Delivery Schedules', icon: '📅' },
-    { id: 'signed', label: 'Signed Notes', icon: '✅' },
-    { id: 'practitioner', label: 'Practitioner Service Usage', icon: '👨‍⚕️' },
-    { id: 'sync', label: 'Sync Issues', icon: '🔄' },
-    { id: 'unsigned', label: 'Unsigned Notes', icon: '📝' }
+    { id: 'recommendation', label: 'Similarity Recommendations', icon: '💡' },
+    { id: 'delivery', label: 'Report Schedules', icon: '📅' },
+    { id: 'signed', label: 'Finalized Notes', icon: '✅' },
+    { id: 'practitioner', label: 'Practitioner Activity', icon: '👨‍⚕️' },
+    { id: 'sync', label: 'Session Sync Issues', icon: '🔄' },
+    { id: 'unsigned', label: 'Pending Notes', icon: '📝' }
   ]
 
   return (
