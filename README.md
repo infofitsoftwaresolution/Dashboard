@@ -190,31 +190,69 @@ Dashboard/
 
 ---
 
+## ✅ Verification After Cloning
+
+After cloning and setting up, verify everything works:
+
+1. **Backend starts without errors:**
+   ```bash
+   cd backend
+   python main.py
+   # Should see: "Application startup complete" and "Uvicorn running on http://0.0.0.0:8000"
+   ```
+
+2. **Frontend starts without errors:**
+   ```bash
+   cd frontend
+   npm run dev
+   # Should see: "Local: http://localhost:5173"
+   ```
+
+3. **API is accessible:**
+   - Visit: http://localhost:8000/docs (Swagger UI)
+   - Visit: http://localhost:8000/ (Should return: `{"message":"Dashboard API is running"}`)
+
+4. **Frontend connects to backend:**
+   - Open: http://localhost:5173
+   - Check browser console for any errors
+   - Dashboard should load (may show empty data if Athena not configured yet)
+
 ## 🐞 Common Issues
 
 ### Backend not starting
 
-* Python 3.8+
-* Virtual environment activated
-* Dependencies installed
-* `.env` configured correctly
+* Python 3.8+ installed
+* Virtual environment activated (`venv\Scripts\activate` on Windows, `source venv/bin/activate` on Linux/Mac)
+* Dependencies installed (`pip install -r requirements.txt`)
+* `.env` file exists and configured correctly (copy from `env.example`)
+* AWS credentials are valid
+
+### Import errors after cloning
+
+If you see `ModuleNotFoundError` for `api`:
+* Make sure you're running from the `backend/` directory
+* The `backend/api/` folder should exist with all files
+* Try: `pip install -r requirements.txt` again
 
 ### No data showing
 
-* AWS credentials are valid
-* Athena table exists
-* Run:
+* AWS credentials are valid in `.env`
+* Athena database and table exist (see SETUP.md)
+* Run in Athena console:
 
 ```sql
 MSCK REPAIR TABLE audit_trail_data;
 ```
 
-* Check S3 permissions
+* Check S3 bucket permissions
+* Verify S3 bucket name and prefix in `.env` match your setup
 
 ### Frontend not connecting
 
-* Backend running on localhost:8000
-* Check browser console
+* Backend running on http://localhost:8000
+* Check browser console for CORS errors
+* Verify `API_BASE_URL` in frontend code points to `http://localhost:8000`
+* Check that backend CORS allows your frontend origin
 
 ---
 
