@@ -12,12 +12,20 @@ load_dotenv()
 
 class DatabaseService:
     def __init__(self):
-        self.db_host = os.getenv('DB_HOST', 'dashboard.c3ea24kmsrmf.ap-south-1.rds.amazonaws.com')
+        self.db_host = os.getenv('DB_HOST')
         self.db_port = os.getenv('DB_PORT', '5432')
-        self.db_name = os.getenv('DB_NAME', 'postgres')
-        self.db_user = os.getenv('DB_USER', 'postgres')
-        self.db_password = os.getenv('DB_PASSWORD', 'Dashboard6287')
+        self.db_name = os.getenv('DB_NAME')
+        self.db_user = os.getenv('DB_USER')
+        self.db_password = os.getenv('DB_PASSWORD')
         self.table_name = os.getenv('TABLE_NAME', 'audittrail_firehose')
+        
+        # Validate required environment variables
+        if not all([self.db_host, self.db_name, self.db_user, self.db_password]):
+            raise ValueError(
+                "Missing required database environment variables. "
+                "Please set DB_HOST, DB_NAME, DB_USER, and DB_PASSWORD in your .env file. "
+                "See env.example for reference."
+            )
     
     def get_connection(self):
         """Create and return a PostgreSQL database connection"""
