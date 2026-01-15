@@ -17,7 +17,7 @@ class DatabaseService:
         self.db_name = os.getenv('DB_NAME', 'postgres')
         self.db_user = os.getenv('DB_USER', 'postgres')
         self.db_password = os.getenv('DB_PASSWORD', 'Dashboard6287')
-        self.table_name = os.getenv('TABLE_NAME', 'audit_trail_data')
+        self.table_name = os.getenv('TABLE_NAME', 'audittrail_firehose')
     
     def get_connection(self):
         """Create and return a PostgreSQL database connection"""

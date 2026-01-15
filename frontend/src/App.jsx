@@ -15,7 +15,6 @@ import SkeletonLoader from './components/SkeletonLoader'
 import EmptyState from './components/EmptyState'
 import Modal from './components/Modal'
 import DataTable from './components/DataTable'
-import AthenaDataView from './components/AthenaDataView'
 import './App.css'
 
 const API_BASE_URL = 'http://localhost:8000'
@@ -42,9 +41,6 @@ function App() {
   useEffect(() => {
     if (activeSection === 'dashboard') {
       fetchDashboardData(dateRange, monthRange, selectedPractitioner, selectedProgram, selectedLocation)
-    } else if (activeSection === 'athena') {
-      // Athena data is fetched by the component itself
-      setLoading(false)
     } else {
       fetchSectionData(activeSection, dateRange, monthRange, selectedPractitioner, selectedProgram, selectedLocation)
     }
@@ -271,7 +267,6 @@ function App() {
 
   const getSectionTitle = (section) => {
     const titles = {
-      'athena': 'Athena Data View',
       'audit': 'Audit Trail Summary',
       'patient-access': 'Patient Access Logs',
       'patient-service': 'Patient Service Usage',
@@ -286,18 +281,6 @@ function App() {
   }
 
   const renderContent = () => {
-    if (activeSection === 'athena') {
-      return (
-        <AthenaDataView
-          dateRange={dateRange}
-          monthRange={monthRange}
-          selectedPractitioner={selectedPractitioner}
-          selectedProgram={selectedProgram}
-          selectedLocation={selectedLocation}
-        />
-      )
-    }
-    
     if (activeSection !== 'dashboard') {
       return (
         <>
