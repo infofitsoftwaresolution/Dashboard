@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Import API routes
-from api.routes import dashboard, athena
+from api.routes import dashboard, data
 
 # Create FastAPI app
 app = FastAPI(title="Dashboard API", version="1.0.0")
@@ -22,7 +22,7 @@ app.add_middleware(
 
 # Include API routers
 app.include_router(dashboard.router, prefix="/api", tags=["Dashboard"])
-app.include_router(athena.router, prefix="/api/athena", tags=["Athena"])
+app.include_router(data.router, prefix="/api/data", tags=["Data"])
 
 # Root endpoint
 @app.get("/")

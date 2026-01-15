@@ -1,0 +1,75 @@
+================================================================================
+                    IAM POLICY - FILLED WITH YOUR VALUES
+================================================================================
+
+YOUR VALUES:
+- Bucket Name: athena-data-bucket-data
+- Region: ap-south-1
+- Account ID: 777555685730
+
+================================================================================
+                         POLICY 1: BASIC (RECOMMENDED)
+================================================================================
+
+File: lambda-execution-policy-complete.json
+
+This policy includes:
+✅ CloudWatch Logs permissions
+✅ S3 read permissions for your bucket
+✅ VPC network access (if RDS is in VPC)
+
+================================================================================
+                         POLICY 2: WITH SECRETS MANAGER
+================================================================================
+
+File: lambda-execution-policy-with-secrets.json
+
+This policy includes everything from Policy 1 PLUS:
+✅ Secrets Manager access (if you want to use Secrets Manager later)
+
+================================================================================
+                         HOW TO APPLY
+================================================================================
+
+OPTION 1: Via AWS Console
+--------------------------
+1. Go to IAM Console → Policies → Create policy
+2. Click "JSON" tab
+3. Copy and paste the policy from lambda-execution-policy-complete.json
+4. Click "Next"
+5. Name: "ParquetToRDSLambdaPolicy"
+6. Click "Create policy"
+7. Go to Lambda → Your function → Configuration → Permissions
+8. Click on Execution role
+9. Click "Add permissions" → "Attach policies"
+10. Search for "ParquetToRDSLambdaPolicy"
+11. Attach it
+
+OPTION 2: Via AWS CLI
+---------------------
+aws iam create-policy \
+  --policy-name ParquetToRDSLambdaPolicy \
+  --policy-document file://lambda-execution-policy-complete.json
+
+Then attach to your Lambda role:
+aws iam attach-role-policy \
+  --role-name your-lambda-execution-role-name \
+  --policy-arn arn:aws:iam::777555685730:policy/ParquetToRDSLambdaPolicy
+
+================================================================================
+                         QUICK ATTACH (CONSOLE)
+================================================================================
+
+1. Lambda Console → Your function → Configuration → Permissions
+2. Click on Execution role name
+3. Click "Add permissions" → "Create inline policy"
+4. Click "JSON" tab
+5. Paste the policy from lambda-execution-policy-complete.json
+6. Click "Review policy"
+7. Name: "ParquetToRDSPolicy"
+8. Click "Create policy"
+
+================================================================================
+
+
+

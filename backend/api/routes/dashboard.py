@@ -12,9 +12,10 @@ from api.models import (
     ServiceUsageItem, RecommendationItem, DeliveryScheduleItem, SignedNoteItem,
     PractitionerUsageItem, SyncIssueItem, UnsignedNoteItem
 )
-from athena_service import AthenaService
+from database_service import DatabaseService
 
 router = APIRouter()
+db_service = DatabaseService()
 
 @router.get("/metrics", response_model=List[Metric])
 async def get_metrics(
@@ -23,9 +24,9 @@ async def get_metrics(
     start_month: str = None,
     end_month: str = None
 ):
-    """Get dashboard metrics from Athena data"""
+    """Get dashboard metrics from PostgreSQL database"""
     try:
-        athena = AthenaService()
+        db = DatabaseService()
         
         # Convert month range to date range if provided
         if start_month and end_month and not start_date and not end_date:
@@ -41,10 +42,19 @@ async def get_metrics(
             except:
                 end_date = f"{end_month}-31"
         
-        metrics = athena.get_metrics_from_athena(start_date=start_date, end_date=end_date)
-        return metrics
+        data = db.get_all_data(start_date=start_date, end_date=end_date)
+        total_count = len(data)
+        completed = len([d for d in data if d.get('status') in ['completed', 'FINALIZED']])
+        
+        return [
+            {"label": "Total Records", "value": total_count, "change": 0.0, "trend": "neutral"},
+            {"label": "Completed Notes", "value": completed, "change": 0.0, "trend": "neutral"},
+            {"label": "Pending Notes", "value": total_count - completed, "change": 0.0, "trend": "neutral"},
+            {"label": "Unique Patients", "value": len(set([d.get('patient_id') for d in data if d.get('patient_id')])), "change": 0.0, "trend": "neutral"},
+            {"label": "Total Records", "value": total_count, "change": 0.0, "trend": "neutral"}
+        ]
     except Exception as e:
-        # Fallback to empty metrics on error
+        print(f"Error in get_metrics: {e}")
         return [
             {"label": "Visits", "value": 0, "change": 0.0, "trend": "neutral"},
             {"label": "Notes from Scribe", "value": 0, "change": 0.0, "trend": "neutral"},
@@ -60,12 +70,25 @@ async def get_top_users(
     start_month: str = None,
     end_month: str = None
 ):
-    """Get top users data from Athena"""
+    """Get top users data from PostgreSQL"""
     try:
-        athena = AthenaService()
-        users = athena.get_top_users_from_athena(limit=8)
-        return users
+        data = db_service.get_all_data(start_date=start_date, end_date=end_date, limit=1000)
+        # Group by user_id and count visits
+        user_counts = {}
+        for record in data:
+            user_id = record.get('user_id', 'Unknown')
+            if user_id not in user_counts:
+                user_counts[user_id] = 0
+            user_counts[user_id] += 1
+        
+        # Sort and return top 8
+        top_users = sorted(user_counts.items(), key=lambda x: x[1], reverse=True)[:8]
+        return [
+            {"name": f"User {user_id}", "visits": count, "totalTime": "0 min"}
+            for user_id, count in top_users
+        ]
     except Exception as e:
+        print(f"Error in get_top_users: {e}")
         return []
 
 @router.get("/active-users", response_model=ActiveUsersData)
@@ -756,4 +779,34 @@ async def get_unsigned_notes(
         return sorted(unsigned_notes, key=lambda x: x['daysPending'], reverse=True)
     except Exception as e:
         return []
+
+@router.get("/all-data")
+async def get_all_dashboard_data(
+    limit: int = None,
+    start_date: str = None,
+    end_date: str = None,
+    status: str = None,
+    user_id: str = None
+):
+    """Get all dashboard data from PostgreSQL"""
+    try:
+        data = db_service.get_all_data(
+            limit=limit,
+            start_date=start_date,
+            end_date=end_date,
+            status=status,
+            user_id=user_id
+        )
+        return {
+            "success": True,
+            "count": len(data),
+            "data": data
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "count": 0,
+            "data": []
+        }
 

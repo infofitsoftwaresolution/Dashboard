@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda function to process parquet files from S3 and save to RDS PostgreSQL
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: S3 bucket name where parquet files are stored
+    Default: athena-data-bucket-data
+  
+  S3Prefix:
+    Type: String
+    Description: S3 prefix/path to monitor for new parquet files
+    Default: audit-trail-data/raw/
+  
+  DBHost:
+    Type: String
+    Description: RDS PostgreSQL host endpoint
+    Default: database-1.c3ea24kmsrmf.ap-south-1.rds.amazonaws.com
+  
+  DBPort:
+    Type: String
+    Description: RDS PostgreSQL port
+    Default: '5432'
+  
+  DBName:
+    Type: String
+    Description: PostgreSQL database name
+    Default: audit_trail_db
+  
+  DBUser:
+    Type: String
+    Description: PostgreSQL database username
+    NoEcho: true
+  
+  DBPassword:
+    Type: String
+    Description: PostgreSQL database password
+    NoEcho: true
+    MinLength: 8
+
+Globals:
+  Function:
+    Timeout: 900  # 15 minutes (max for Lambda)
+    MemorySize: 1024
+    Runtime: python3.11
+    Environment:
+      Variables:
+        DB_HOST: !Ref DBHost
+        DB_PORT: !Ref DBPort
+        DB_NAME: !Ref DBName
+        DB_USER: !Ref DBUser
+        DB_PASSWORD: !Ref DBPassword
+        TABLE_NAME: audit_trail_data
+
+Resources:
+  DependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: parquet-to-rds-dependencies
+      Description: Dependencies for parquet-to-rds Lambda (pandas, pyarrow, psycopg2)
+      ContentUri: dependencies/
+      CompatibleRuntimes:
+        - python3.11
+      RetentionPolicy: Retain
+  ParquetToRDSFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: parquet-to-rds-processor
+      CodeUri: .
+      Handler: lambda_function.lambda_handler
+      Description: Process parquet files from S3 and insert data into RDS PostgreSQL
+      Runtime: python3.11
+      Timeout: 900
+      MemorySize: 1024
+      Layers:
+        - !Ref DependenciesLayer
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref S3BucketName
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
+      Events:
+        S3PutEvent:
+          Type: S3
+          Properties:
+            Bucket: !Ref S3BucketName
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: .parquet
+                  - Name: prefix
+                    Value: !Ref S3Prefix
+
+Outputs:
+  LambdaFunctionArn:
+    Description: ARN of the Lambda function
+    Value: !GetAtt ParquetToRDSFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaFunctionArn'
+  
+  LambdaFunctionName:
+    Description: Name of the Lambda function
+    Value: !Ref ParquetToRDSFunction
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaFunctionName'
+
