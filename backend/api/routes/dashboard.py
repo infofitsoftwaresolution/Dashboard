@@ -383,16 +383,31 @@ async def get_audit_summary(
         if location:
             data = [d for d in data if d.get('tenant_id') == location]
         
-        return [
-            {
-                "date": str(d.get('audit_datetime', '')),
-                "action": str(d.get('event_name', '')),
-                "user": str(d.get('user_id', '')),
-                "status": str(d.get('status', '')),
-                "details": f"Patient: {d.get('patient_name', 'N/A')}"
-            }
-            for d in data[:100]
-        ]
+        # Remove duplicates based on unique identifier
+        # Use care_record_id as the unique identifier (it's unique per record)
+        # If care_record_id is not available, use audit_datetime + user_id + patient_id combination
+        seen = set()
+        unique_data = []
+        for d in data:
+            # Use care_record_id as unique identifier (it's unique per session/record)
+            care_record_id = d.get('care_record_id')
+            if care_record_id and care_record_id.strip():
+                unique_key = care_record_id
+            else:
+                # Fallback: use combination that includes timestamp to ensure uniqueness
+                unique_key = f"{d.get('audit_datetime')}_{d.get('user_id')}_{d.get('patient_id')}_{d.get('event_name')}"
+            
+            if unique_key and unique_key not in seen:
+                seen.add(unique_key)
+                unique_data.append({
+                    "date": str(d.get('audit_datetime', '')),
+                    "action": str(d.get('event_name', '')),
+                    "user": str(d.get('user_id', '')),
+                    "status": str(d.get('status', '')),
+                    "details": f"Patient: {d.get('patient_name', 'N/A')}"
+                })
+        
+        return unique_data[:100]
     except Exception as e:
         print(f"Error in get_audit_summary: {e}")
         return []

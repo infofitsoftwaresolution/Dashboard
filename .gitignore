@@ -9,6 +9,14 @@ env/
 ENV/
 .venv
 
+# Temporary and test files
+*.tmp
+*.bak
+*.swp
+check_duplicates.py
+test_*.py
+*_test.py
+
 # Environment variables
 .env
 .env.local
@@ -47,11 +55,30 @@ lambda/parquet_to_rds/layer/
 lambda/parquet_to_rds/layer-linux/
 lambda/parquet_to_rds/function-package/
 lambda/parquet_to_rds/*.zip
+.aws-sam/
+samconfig.toml
+lambda-package/
+
+# AWS SAM
+.aws-sam/
+samconfig.toml
 
 # Test files
 *.parquet
 test.parquet
+test-event.json
 
 # Database
 *.db
 *.sqlite
+*.db-journal
+
+# Docker
+*.tar
+
+# AWS
+.aws/
+*.pem
+
+# Deployment packages
+*.zip
